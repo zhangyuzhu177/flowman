@@ -1,0 +1,31 @@
+{
+  "name": "flowman",
+  "productName": "Flowman",
+  "version": "1.0.0",
+  "private": true,
+  "description": "本地 HTTP/HTTPS 调试代理。主窗口和工具页按 Proxyman 6.3.0 的界面结构独立实现。",
+  "main": "dist-electron/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "smoke": "tsx scripts/smoke.ts"
+  },
+  "dependencies": {
+    "lucide-vue-next": "^0.577.0",
+    "node-forge": "^1.3.1",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/node-forge": "^1.3.14",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "electron": "33.4.11",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5",
+    "vite-plugin-electron": "^1.1.2",
+    "vite-plugin-electron-renderer": "^1.0.0",
+    "vue-tsc": "^3.3.13"
+  }
+}
