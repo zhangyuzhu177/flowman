@@ -1,6 +1,6 @@
 <template>
   <div class="empty">
-    <Globe :size="42" color="#0a64d8" style="margin-bottom: 12px; opacity: 0.8;" />
+    <Globe :size="42" color="var(--blue)" style="margin-bottom: 12px; opacity: 0.85;" />
     <strong>等待网络流量中...</strong>
     <p>
       代理监听端口: <code>{{ proxyState?.port || 9001 }}</code>。

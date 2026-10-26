@@ -1,7 +1,7 @@
 <template>
   <header class="toolbar">
     <div class="brand" @click="setView('capture')">
-      <Activity :size="18" color="#0a64d8" />
+      <Activity :size="18" color="var(--blue)" />
       <span>Flowman</span>
     </div>
 
@@ -73,12 +73,12 @@
     </button>
 
     <button
-      :class="{ active: currentView === 'tools' }"
-      @click="toggleTools"
-      title="工具与规则设置 (Cmd+T)"
+      :class="{ active: isSettingsOpen }"
+      @click="toggleSettings()"
+      title="偏好设置与工具箱 (Cmd+, / Cmd+T)"
     >
-      <SlidersHorizontal :size="14" />
-      工具
+      <Settings :size="14" />
+      设置
     </button>
 
     <button @click="openBrowser()" title="打开免配置受控调试浏览器">
@@ -96,11 +96,12 @@ import {
   X,
   ZapOff,
   Send,
-  SlidersHorizontal,
   Globe,
+  Settings,
 } from 'lucide-vue-next';
 import { useProxyState } from '../composables/useProxyState';
 import { useFlows } from '../composables/useFlows';
+import { useSettings } from '../composables/useSettings';
 
 const {
   recording,
@@ -118,6 +119,8 @@ const {
   filterKind,
   clearFlows,
 } = useFlows();
+
+const { isSettingsOpen, toggleSettings } = useSettings();
 
 const chips = [
   { id: 'all', label: '全部' },
@@ -137,9 +140,5 @@ async function toggleNoCache() {
 
 function toggleCompose() {
   setView(currentView.value === 'compose' ? 'capture' : 'compose');
-}
-
-function toggleTools() {
-  setView(currentView.value === 'tools' ? 'capture' : 'tools');
 }
 </script>

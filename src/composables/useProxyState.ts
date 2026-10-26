@@ -1,11 +1,12 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import type { ProxyState, FlowmanRules } from '../types/flow';
+import { useSettings } from './useSettings';
 
 const proxyState = ref<ProxyState | null>(null);
 const rules = ref<FlowmanRules | null>(null);
 const recording = ref<boolean>(true);
-const currentView = ref<'capture' | 'tools' | 'compose'>('capture');
-const currentTool = ref<string>('ssl');
+const currentView = ref<'capture' | 'compose'>('capture');
+const currentTool = ref<string>('appearance');
 const statusMessage = ref<string>('');
 
 export function useProxyState() {
@@ -35,7 +36,11 @@ export function useProxyState() {
       if (action === 'compose') {
         currentView.value = 'compose';
       } else if (action === 'tools') {
-        currentView.value = 'tools';
+        const { openSettings } = useSettings();
+        openSettings('proxy');
+      } else if (action === 'settings') {
+        const { openSettings } = useSettings();
+        openSettings('appearance');
       }
     });
   }
@@ -101,7 +106,7 @@ export function useProxyState() {
     return window.flowman.selectFile();
   }
 
-  function setView(view: 'capture' | 'tools' | 'compose') {
+  function setView(view: 'capture' | 'compose') {
     currentView.value = view;
   }
 

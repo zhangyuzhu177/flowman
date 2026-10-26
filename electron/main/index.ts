@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, Menu, shell, session } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, Menu, shell, session, nativeTheme } from 'electron';
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
@@ -131,6 +131,12 @@ function buildMenu() {
           },
         },
         { type: 'separator' },
+        {
+          label: '偏好设置...',
+          accelerator: 'CmdOrCtrl+,',
+          click: () => send('menu', 'settings'),
+        },
+        { type: 'separator' },
         { role: 'quit', label: '退出' },
       ],
     },
@@ -155,6 +161,7 @@ function buildMenu() {
       submenu: [
         { label: 'Compose', accelerator: 'Cmd+N', click: () => send('menu', 'compose') },
         { label: '工具页', accelerator: 'Cmd+T', click: () => send('menu', 'tools') },
+        { label: '偏好设置', accelerator: 'CmdOrCtrl+,', click: () => send('menu', 'settings') },
         { label: '调试浏览器', click: () => openBrowser() },
       ],
     },
@@ -238,6 +245,16 @@ function registerIpc() {
   });
   ipcMain.handle('highlight', (_event, payload: { id: string; color: string }) => {
     return proxy.highlight(payload.id, payload.color);
+  });
+  ipcMain.handle('theme:set', (_event, theme: 'system' | 'light' | 'dark') => {
+    nativeTheme.themeSource = theme;
+    return nativeTheme.shouldUseDarkColors;
+  });
+  ipcMain.handle('theme:get', () => {
+    return {
+      themeSource: nativeTheme.themeSource,
+      shouldUseDarkColors: nativeTheme.shouldUseDarkColors,
+    };
   });
 }
 

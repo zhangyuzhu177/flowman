@@ -29,9 +29,6 @@
       </div>
     </div>
 
-    <!-- Tools View -->
-    <ToolsView v-if="currentView === 'tools'" />
-
     <!-- Compose View -->
     <ComposeView v-if="currentView === 'compose'" />
 
@@ -40,6 +37,9 @@
 
     <!-- Breakpoint Interception Modal Sheet -->
     <BreakpointModal />
+
+    <!-- Unified Settings & Tools Modal Dialog (Left-Right Layout) -->
+    <SettingsModal />
 
     <!-- Global Floating Context Menu -->
     <ContextMenu />
@@ -56,11 +56,12 @@ import Toolbar from './components/Toolbar.vue';
 import Sidebar from './components/Sidebar.vue';
 import FlowTable from './components/FlowTable.vue';
 import Inspector from './components/Inspector.vue';
-import ToolsView from './components/ToolsView.vue';
+import SettingsModal from './components/SettingsModal.vue';
 import ComposeView from './components/ComposeView.vue';
 import StatusBar from './components/StatusBar.vue';
 import BreakpointModal from './components/BreakpointModal.vue';
 import ContextMenu from './components/ContextMenu.vue';
+import { useSettings } from './composables/useSettings';
 
 const {
   currentView,
@@ -80,6 +81,26 @@ const {
   setupListeners: setupBreakListeners,
   cleanupListeners: cleanupBreakListeners,
 } = useBreakpoint();
+
+const {
+  initSettings,
+  isSettingsOpen,
+  closeSettings,
+  toggleSettings,
+} = useSettings();
+
+function handleGlobalKeydown(e: KeyboardEvent) {
+  if ((e.metaKey || e.ctrlKey) && e.key === ',') {
+    e.preventDefault();
+    toggleSettings('appearance');
+  } else if ((e.metaKey || e.ctrlKey) && (e.key === 't' || e.key === 'T')) {
+    e.preventDefault();
+    toggleSettings('proxy');
+  } else if (e.key === 'Escape' && isSettingsOpen.value) {
+    e.preventDefault();
+    closeSettings();
+  }
+}
 
 // Inspector dynamic resizing
 const stageEl = ref<HTMLElement | null>(null);
@@ -128,6 +149,9 @@ function startInspectorResize(e: MouseEvent) {
 }
 
 onMounted(async () => {
+  initSettings();
+  window.addEventListener('keydown', handleGlobalKeydown);
+
   setupProxyListeners();
   setupFlowsListeners();
   setupBreakListeners();
@@ -137,6 +161,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown);
   cleanupProxyListeners();
   cleanupFlowsListeners();
   cleanupBreakListeners();

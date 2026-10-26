@@ -198,6 +198,8 @@ export interface FlowmanApi {
   onStatus: (callback: (status: ProxyState) => void) => () => void;
   onCleared: (callback: () => void) => () => void;
   onMenu: (callback: (action: string) => void) => () => void;
+  setNativeTheme?: (theme: 'system' | 'light' | 'dark') => Promise<boolean>;
+  getNativeTheme?: () => Promise<{ themeSource: string; shouldUseDarkColors: boolean }>;
 }
 
 declare global {

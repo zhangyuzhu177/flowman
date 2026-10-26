@@ -51,4 +51,6 @@ contextBridge.exposeInMainWorld('flowman', {
     ipcRenderer.on('menu', handler);
     return () => ipcRenderer.off('menu', handler);
   },
+  setNativeTheme: (theme: string) => ipcRenderer.invoke('theme:set', theme),
+  getNativeTheme: () => ipcRenderer.invoke('theme:get'),
 });

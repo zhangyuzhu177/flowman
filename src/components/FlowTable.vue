@@ -62,11 +62,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import type { FlowSummary } from '../types/flow';
 import { useFlows, formatSize, kindOf, flagsFor, toCurl } from '../composables/useFlows';
 import { useProxyState } from '../composables/useProxyState';
 import { useContextMenu, type ContextMenuItem } from '../composables/useContextMenu';
+import { useSettings } from '../composables/useSettings';
 import EmptyState from './EmptyState.vue';
 
 const {
@@ -80,8 +81,19 @@ const {
 
 const { rules, saveRules, setView } = useProxyState();
 const { showMenu } = useContextMenu();
+const { autoScroll } = useSettings();
 
 const tableContainer = ref<HTMLElement | null>(null);
+
+watch(() => visibleFlows.value.length, () => {
+  if (autoScroll.value && tableContainer.value) {
+    nextTick(() => {
+      if (tableContainer.value) {
+        tableContainer.value.scrollTop = tableContainer.value.scrollHeight;
+      }
+    });
+  }
+});
 
 function statusClass(status?: number): string {
   if (!status) return 'st-0';

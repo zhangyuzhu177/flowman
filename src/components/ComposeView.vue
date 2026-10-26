@@ -22,7 +22,7 @@
 
       <!-- URL Bar -->
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <select v-model="method" style="width: 110px; height: 34px; font-weight: 700; border-radius: 8px; border: 1px solid #cfd8e6;">
+        <select v-model="method" style="width: 110px; height: 34px; font-weight: 700; border-radius: 8px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--ink);">
           <option value="GET">GET</option>
           <option value="POST">POST</option>
           <option value="PUT">PUT</option>
@@ -35,7 +35,7 @@
           v-model="url"
           type="text"
           placeholder="https://example.com/api/v1/resource"
-          style="flex: 1; height: 34px; border-radius: 8px; border: 1px solid #cfd8e6; padding: 0 10px; font-family: var(--font-mono);"
+          style="flex: 1; height: 34px; border-radius: 8px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--ink); padding: 0 10px; font-family: var(--font-mono);"
         />
       </div>
 
@@ -80,7 +80,7 @@
         <div class="form-grid">
           <div class="field wide">
             <label>响应 Headers</label>
-            <table class="header-table" style="background: #f8fafc; border-radius: 8px; padding: 8px;">
+            <table class="header-table" style="background: var(--bg-subtle); border-radius: 8px; padding: 8px;">
               <tbody>
                 <tr v-for="[k, v] in resultFlow.response?.headers || []" :key="k">
                   <td>{{ k }}</td>
